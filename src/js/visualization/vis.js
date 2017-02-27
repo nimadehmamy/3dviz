@@ -71,7 +71,7 @@ var Viz = function(data,name){
 } // Vizz
 
 network.makeLinks = function(){
-    nid = network.info.links.data;
+    nid = network.info.links;
     console.log('making links!');
     for (var i in nid){
         edges[i] = {
