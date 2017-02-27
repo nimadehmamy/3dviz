@@ -25,16 +25,6 @@
         
         <div class="center" id="obj">
           <div>
-            <a onclick="exporter.dlObj()" href="#">Download .obj file</a>
-            <!--<a id=dl download="network.obj"></a>-->
-          </div>
-          <div>
-              
-            <!--<div id="logger" style="width:40%; color:none;padding:none;"> Click elements</div>  style="width:100%;
-            color:#939393"-->
-          Click to hide: <button class="button" id="logger" onclick="misc.hide()" style="width:50%;">Element</button>
-          </div>
-          <div>
             <form class ="in" >
                 <!--<input data-bind="value: photoUrl" />-->
                 <label>
@@ -98,8 +88,20 @@
             </script>
             
           </div>
+          
+          <div >
+              <button class="button" onclick="exporter.dlObj()" style="width:70%;">Download .obj file</button>
+            <!--<a onclick="exporter.dlObj()" href="#">Download .obj file</a>-->
+            <!--<a id=dl download="network.obj"></a>-->
+          </div>
+          <div>
+              
+            <!--<div id="logger" style="width:40%; color:none;padding:none;"> Click elements</div>  style="width:100%;
+            color:#939393"-->
+          Click to hide:<br> <button class="button" id="logger" onclick="misc.hide()" style="width:50%;">Element</button>
+          </div>
           <div style="text-align:center;">
-              <a href="https://github.com/nimadehmamy/3nevis">Github</a>
+              <a href="https://github.com/nimadehmamy/3dviz">Github</a>
           </div>
             
         </div>

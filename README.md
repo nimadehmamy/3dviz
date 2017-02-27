@@ -1,6 +1,6 @@
 # 3D Network Visualization
 This is a simplified and lighter version of the
-[3Nevis](https://github.com/nimadehmamy/3nevis) project.
+[3Nevis](https://github.com/nimadehmamy/3dviz) project.
 Simply, make the following json file and uplaod it.
 
 <pre>
