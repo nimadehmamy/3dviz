@@ -1,0 +1,115 @@
+.in{
+    display: inline-block;
+    margin-top:2px;
+    margin-bottom:2px;
+    width:100%;
+}
+.in input{
+    border:none;
+    border-top-left-radius:3px;
+    border-bottom-left-radius:3px;
+    background-color: bisque;
+    width:66%;
+    padding:5px;
+}
+.in button{
+    background-color: red;
+    border: none;
+    border-top-right-radius:3px;
+    border-bottom-right-radius:3px;
+    
+    color: white;
+    padding: 5px;
+    width:30%;
+}
+.note textarea{
+    border:none;
+    border-radius:3px;
+    background-color: bisque;
+    width:96%;
+    height:96%;
+    padding:5px;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+}
+.float{
+    position: fixed;
+    top: 10%;
+    left: 3%;
+    padding: .4%;
+    border-radius: 8px;
+    background-color: rgba(210,40,10,.8);/*brickred;*/
+    
+    width: 20%;
+    color: white;
+    font-family:Tahoma;
+    /*font-weight:500;*/
+    box-shadow: 0 0 10px 0 rgb(115, 48, 3);
+    
+}
+.float video{
+    border-radius: 4px;
+}
+.in.green{
+    background-color:green;
+}
+
+
+.tags li {
+  margin: 4px 12px 0px 0;
+}
+hr.style-two {
+    border: 0;
+    height: 1px;
+    margin: 0;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0));
+}
+.infos{
+    padding: 5px;
+}
+.infos input{
+    border-radius:0;
+    width:92%;
+}
+
+.note {
+    position: relative;
+    height:200px;
+}
+
+
+textarea {
+    position:absolute;
+    left:2%; top:2%;
+    /*border:0; margin:0;*/
+    box-sizing:border-box;
+    -moz-box-sizing:border-box
+}
+
+#main{
+    border-style: solid;
+    
+}
+
+#notes{
+    position: fixed;
+    top: 10%;
+    left:77%;
+    background-color: rgba(210,40,10,.8);/*brickred;*/
+    width: 20%;
+    min-width: 50px;
+}
+
+#toolbox{
+    padding-bottom: 10px;
+    background-color: rgba(75,160,38,.9);/*rgba(255,140,0,.8);*//*darkorange;*/
+    width:30%;
+    min-width: 260px;
+    max-width: 300px;
+}
+
+
+/*#toolbox:hover {*/
+/*    width: 300px;*/
+/*    transition: width 2s;*/
+/*}*/

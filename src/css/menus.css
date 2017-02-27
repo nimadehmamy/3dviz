@@ -1,0 +1,153 @@
+body { margin: 0; font-family:"tahoma";}
+canvas { width: 100%; height: 100% }
+#canvas-container,
+#obj {
+  position: absolute;
+  top: 0;
+  /*left: 0;
+  */
+  font-size: 18;
+  
+}
+/*
+#logger {
+  position: absolute;
+  background-color: #ffaaff;
+  opacity: .5;
+  top:35pt;
+}
+.center {
+  opacity:1.;
+  margin: auto;
+  width: 20%;
+  border: 0px solid #000000;
+  border-left:5px solid #00ffff;
+  background-color: #121136;
+  padding: 10px;
+  color: #eeeeff;
+  border-radius: 5px;
+}
+*/
+.center {
+  top: 2px;
+  opacity:1.;
+  margin: auto;
+  margin-left: 2px;
+  width: 20%;
+  border: 0px solid #000000;
+  /*border-left:4px solid #007fbf;
+  */
+  background-color: none;/*#121136;*/
+  padding: 0px;
+  color: #fff;
+  font-size: 13px;
+  /*border-radius: 5px;
+  */
+}
+.center div{
+  padding: 10px;
+  margin-bottom:1px;
+  background: #1a1a1a;/*rgba(249, 139, 3,.9);/*rgba(13,5,34,.9);/*#130534;*/
+  border-radius: 3px;
+  
+}
+.center div input{
+  background: #ffffff;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  padding-left: 4px;
+  padding-right: 0px;
+  border: none;
+  border-radius:2px;
+  width:98%;
+  color:#737373;
+  /*box-shadow: 0 0 3px 2px rgba(222,133, 5, 1);
+    */
+}
+.center a{
+    color: #ffeeff;
+}
+/*
+.center#logger{
+  position: absolute;
+  background-color: #ffaaff;
+  opacity: .5;
+  top:35pt;
+}
+*/
+.button {
+    width:100%;
+    background-color: #2fa1d6;/*#4CAF50; /* Green */
+    border: none;
+    border-radius: 2px;
+    color: white;
+    padding: 7px 1%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    /*font-size: 16px;*/
+    box-shadow: 0px 1px 1px 0px green;
+}
+
+.center div#stats{
+  padding: initial;
+  margin-bottom:0px;
+  background: initial;/*#130534;*/
+}
+.button#stats div{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    /*font-size: 16px;*/
+}
+.cen{
+  background: none;
+  margin: auto;
+  width:95%;
+  padding: 0;
+}
+label.upnet input[type="file"] {
+    /*font-size: 6px;*/
+    position: fixed;
+    width:10%;
+    top: -100px;
+    left: -1000px;
+}
+#choose{
+    width:90%;
+    background-color: #2fa1d6;/*#4CAF50; /* Green */
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0px 1px 1px 0px green;
+    color: white;
+    padding: 7px 5%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    /*font-size: 16px;*/
+}
+
+.in input[type="file"] {
+    /*font-size: 6px;*/
+    position: fixed;
+    width: 10%;
+    top: -1000px;
+    left: -1000px;
+}
+.in2 button{
+    background-color: #fdae61;
+    /*red;*/
+    border: none;
+    border-radius: 3px;
+    color: white;
+    padding: 7px 5%;
+    width: 100%;
+    margin: auto;
+}
+
+
+

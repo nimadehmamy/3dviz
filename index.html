@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<meta name="description" content="Free Web tutorials">
+        <meta name="keywords" content="HTML,CSS,JavaScript,THREE.js">
+        <meta name="author" content="Nima Dehmamy">
+		<title>3D Network Visualization</title>
+	      <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+        -->
+        <script src='src/js/vendor/jquery-2.1.4.min.js'></script>
+        <script src='src/js/vendor/knockout-3.4.1.js'></script>
+
+        <script src='src/js/eventhandling/events.js'></script>
+		
+		<style>
+		</style>
+		<link rel="stylesheet" type="text/css" href="src/css/menus.css">
+	</head>
+	<body>
+	    
+        <div id="canvas-container" title="3D scene"></div>
+        
+        <div class="center" id="obj">
+          <div>
+            <a onclick="exporter.dlObj()" href="#">Download .obj file</a>
+            <!--<a id=dl download="network.obj"></a>-->
+          </div>
+          <div>
+              
+            <!--<div id="logger" style="width:40%; color:none;padding:none;"> Click elements</div>  style="width:100%;
+            color:#939393"-->
+          Click to hide: <button class="button" id="logger" onclick="misc.hide()" style="width:50%;">Element</button>
+          </div>
+          <div>
+            <form class ="in" >
+                <!--<input data-bind="value: photoUrl" />-->
+                <label>
+                <input data-bind="event: {change: $root.fileUpload}" type="file" class="button"/>
+                <div id="choose">Upload Network Json</div>
+                </label>
+            </form>
+            
+            
+            <script>
+              events.dragAround('obj')
+              var ViewModel = function(label) {
+                  this.nodeLabel = ko.observable('Network Name');
+                  var self = this;
+                  self.makeViz = function(){
+                      console.log('ko worked');
+                      Viz();
+                  };
+                  this.fileUpload = function(data, e){
+                      var file = e.target.files[0];
+                      console.log(file);
+                      var reader = new FileReader();
+                  
+                      reader.onloadend = function(onloadend_e) {
+                          var result = reader.result; // Here is your base 64 encoded file. Do with it what you want.
+                          Viz(JSON.parse(result), file.name);
+                      };
+                  
+                      if (file) {
+                          reader.readAsText(file);
+                      }
+                  
+                  };
+                     
+              };
+              
+              ko.applyBindings(new ViewModel()); // This makes Knockout get to work
+
+              var vizflag = {};
+              var VizClear = function(id){
+                if (!(id in vizflag)){
+                  console.log(id);
+                  var netn = document.getElementById(id);
+                  netn.value='';
+                  netn.style.color = '#000000';
+                  var b = document.getElementById('Viz');
+                  b.textContent = "Viz";
+                  b.style.backgroundColor = '#4CAF50';
+                  vizflag[id] = true;
+                }
+              }
+              
+              var VizFill = function(id){
+                VizClear(id);
+                var d = document.getElementById('ctrl');
+                f = d.files[0]
+                var z = document.getElementById(id);
+                z.value = f.webkitRelativePath.split('/')[0];
+                Viz();
+              }
+            </script>
+            
+          </div>
+          <div style="text-align:center;">
+              <a href="https://github.com/nimadehmamy/3nevis">Github</a>
+          </div>
+            
+        </div>
+            
+        <script src="src/js/vendor/dat.gui.min.js"></script>
+    	  
+    	<script src="src/js/vendor/danml-download.js"></script>
+        <!--<script>download("hello world", "hello.txt", "text/plain")</script>-->
+        <script src="src/js/vendor/stats.min.js"></script>
+        
+        <script src="src/js/vendor/three.min-82.js"></script>
+    		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.min.js"></script>
+    		-->
+    		<!--<script type="text/javascript" src="src/js/ThreeCanvas.js"></script> -->
+    	<script src="src/js/vendor/OrbitControls.js"></script>
+        <script src="src/js/vendor/TrackballControls.js"></script>
+        <script src="src/js/vendor/OBJExporter.js"></script>
+        <script src="src/js/vendor/STLExporter.js"></script>
+        
+    	<!--
+    	<script src="src/js/classes/network.js">/*define node and link classes, and extras*/</script>
+    	-->
+    	<script src="src/js/visualization/scene-setup.js">/*setup the scene and camera*/</script>
+    	<script src="src/js/classes/network3.js">/*define node and link classes, and extras*/</script>
+    	<script src="src/js/data-handling/loader.js">/*to load nodes and edges*/</script>
+    	<script src="src/js/misc/misc.js">/*Miscellaneous functions*/</script>
+    
+    	<!--<script src="src/js/visualization/vis-test.js" defer>/* the main script */</script>
+    	-->
+    	<!--<script src="src/js/visualization/vis-conf-1.js" defer>/* the main script */</script>
+    	-->
+    	<script src="src/js/controls/control-funcs.js">/* menu functions */</script>
+    	<script src="src/js/menus/controls.js" defer>/* gui menus and variables */</script>
+
+    	<script src="src/js/visualization/vis.js" defer>/* the main script */</script>
+    	<!--<script src="src/js/misc/typeahead-conf.js">/*listing dirs*/</script>
+    	-->
+    	<script src="src/js/exporters/OBJExporter.js"></script>
+    	<script src="src/js/exporters/exporter.js">/* for exporting and downloading */</script>
+    	<!--<a href="data:application/octet-stream;charset=utf-16le,helloworld">text file</a>
+        <br>
+        -->
+        
+	  
+	</body>
+	
+</html>
