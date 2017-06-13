@@ -79,6 +79,7 @@ network.makeLinks = function(){
             size : nid[i].radius,
             weight : nid[i].weight,
             points : nid[i].points,
+            endPoints : nid[i].end_points,
             link : {}
         };
     }

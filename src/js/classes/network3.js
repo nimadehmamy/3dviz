@@ -115,6 +115,17 @@ var network = {
   getDegrees : function(edges){
     var k = {};
     for (var ii in edges){
+        var i = edges[ii].endPoints;
+        if (k[i[0]]) { k[i[0]] += 1; }
+        else { k[i[0]] = 1; }
+        if (k[i[1]]) { k[i[1]] += 1; }
+        else { k[i[1]] = 1; }
+    }
+    return k;
+  },
+  getDegrees0 : function(edges){
+    var k = {};
+    for (var ii in edges){
         var i = ii.split(',');
       if (k[parseInt(i[0])]){k[parseInt(i[0])] +=1;}
       else {k[parseInt(i[0])] =1;}
