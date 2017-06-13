@@ -14,13 +14,13 @@ function redrawEdges(){
 
 function redrawNodes(){
     console.log('redrawing nodes...');
-  for (var i in nodes){
-    scene.remove(nodes[i].node);
-  }
-  nodes = network.get_nodes(network.info.nodes.positions, center = false, sizes = undefined
-//   , sizeFunc = function(s){return Math.abs(controls.scale)*controls.nodeSize*network.sizeFunc(s)}
-  );
-  //
+    for (var i in nodes) {
+        scene.remove(nodes[i].node);
+    }
+    nodes = network.get_nodes(network.info.nodes.positions, center = false, sizes = degrees
+        //   , sizeFunc = function(s){return Math.abs(controls.scale)*controls.nodeSize*network.sizeFunc(s)}
+    );
+    //
 }
 
 

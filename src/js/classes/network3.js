@@ -112,19 +112,33 @@ var network = {
     return k;
   },
   
+  getDegrees : function(edges){
+    var k = {};
+    for (var ii in edges){
+        var i = ii.split(',');
+      if (k[parseInt(i[0])]){k[parseInt(i[0])] +=1;}
+      else {k[parseInt(i[0])] =1;}
+      if (k[parseInt(i[1])]){k[parseInt(i[1])] +=1;}
+      else {k[parseInt(i[1])] =1;}
+    }
+    return k;
+  },
+  
   
   
   get_nodes : function(nodeloc, center, sizes, sizeFunc, hide){
     var c = controls.scale;
     var nodes = {};
-    
-    if(typeof sizeFunc === 'undefined'){
+    if(!sizeFunc){
       sizeFunc = network.sizeFunc;
     }
     
     for(i in nodeloc){
       var bx = false;
-      var ns = network.sizeFunc(controls.scale*controls.nodeSize);
+      if (!sizes){ var sz = 1; }
+      else{ var sz = sizes[i];}
+      console.log('size',i,':',sz);
+      var ns = network.sizeFunc(controls.scale*controls.nodeSize*sz);
       console.log(ns);
       var ii = nodeloc[i];
       id = i;
@@ -146,7 +160,7 @@ var network = {
   },
   
   sizeFunc : function(s){
-    return Math.pow(s, 1/2.0); // take s as volume, thus radius is cubic root
+    return Math.pow(s, controls.nodeExp); // take s as volume, thus radius is cubic root
   }
   
 }

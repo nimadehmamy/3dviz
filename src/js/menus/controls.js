@@ -1,6 +1,7 @@
 var controls = new function(){
     this.scale = 1;
-    this.nodeSize = 10;
+    this.nodeSize = 1.0;
+    this.nodeExp = 1.0;
     //this.nodeColor = '#0000ff';
 	  this.nodeColor = '#ede7e4';
     this.edgeDiameter = 1.;
@@ -33,8 +34,9 @@ function background(){
   renderer.setClearColor( parseInt(controls.background.slice(1),16),1);
 }
 
-guiNode.add(controls, 'nodeSize', 0.001, 2000).step(0.001).onFinishChange(redrawNodes);
+guiNode.add(controls, 'nodeSize', 0.0001, 2000).step(0.001).onFinishChange(redrawNodes);
 guiNode.add(controls, 'nodeDetail', 0, 10).step(1).onFinishChange(redrawNodes);
+guiNode.add(controls, 'nodeExp', 0.1, 2).onFinishChange(redrawNodes);
 guiNode.addColor(controls, 'nodeColor').onChange(redrawNodes);
 
 guiEdge.add(controls, 'edgeDiameter', 0.001, 4).step(0.01).onFinishChange(redrawEdges);
@@ -76,4 +78,15 @@ var guiMisc = gui.addFolder('Misc.');
 
 controls.grow = false;
 guiMisc.add(controls, 'grow');
+
+controls.axisHelper = false;
+var axisHelper = new THREE.AxisHelper( 10 );
+
+guiMisc.add(controls, 'axisHelper').onChange(function(){
+    if (controls.axisHelper){
+        scene.add( axisHelper );
+    }else scene.remove( axisHelper );
+
+})
+
 

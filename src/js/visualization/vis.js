@@ -35,9 +35,6 @@ function makeSurface(){
 }
 
 
-var axisHelper = new THREE.AxisHelper( 10 );
-scene.add( axisHelper );
-
 
 var eventlogger = document.getElementById('logger');
 
@@ -51,6 +48,8 @@ var netName, vars, edge_list, edges = {}, nodes_loc, nodes = {}, degrees, confli
 var Err;
 var Viz = function(data,name){
     netName = name;
+    var nam = document.getElementById('netName');
+    nam.innerText = netName;
     // edge_list = loader.readMatrix('assets/network/' + netName + '/edgelist.txt', ' ');
     // nodes_loc = loader.readMatrix('assets/network/' + netName + '/nodes.txt', ' ');
     network.info = data;
@@ -58,7 +57,7 @@ var Viz = function(data,name){
     controls.scale = 1 / data.scale;
     redrawEdges();
     // redrawNodes();
-    degrees = network.get_degrees(edge_list);
+    degrees = network.getDegrees(edges);
     //nodes_loc = network.info.nodes.positions;
     nodes = network.get_nodes(network.info.nodes.positions, center = false, sizes = degrees);
     
