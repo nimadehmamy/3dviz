@@ -182,13 +182,65 @@ misc.growEdge = function(){
     }
 }
 
-misc.theta = 0;
-misc.r = 50;
+misc.camTheta = 0;
+misc.camDist = 50;
+misc.camHeight = 1;
 misc.camSpeed = 0.02;
 misc.rotCam = function() {
-    misc.theta += misc.camSpeed;
-    camera.position.set(misc.r * Math.cos(misc.theta), misc.r, misc.r * Math.sin(misc.theta));
+    misc.camTheta += misc.camSpeed;
+    var r = misc.camDist;
+    camera.position.set(r * Math.cos(misc.camTheta), r*misc.camHeight, r * Math.sin(misc.camTheta));
     camera.lookAt({ x: 0, y: 0, z: 0 });
     misc.rotCamTO = setTimeout("misc.rotCam()", 20);
 }
 
+
+misc.font;
+var fontLoader = new THREE.FontLoader();
+fontLoader.load( 'src/fonts/helvetiker_regular.typeface.json', function(f){misc.font=f});
+
+misc.fontSize = 4;
+misc.textColor = '#aaaaaa';
+misc.textExtrusion = 1.2;
+// misc.textMaterial = new THREE.MeshPhongMaterial( { color: misc.textColor, shading: THREE.FlatShading } )
+// Add label as node attribute
+misc.addLabel = function(label,s,h){
+    var txgeo = new THREE.TextGeometry(label,//.replace(' ','\n'),
+    {
+        font: misc.font,
+        size: s,//misc.fontSize,
+        height: h,
+        curveSegments: 2,
+        bevelEnabled: false
+    });
+    var txmat = new THREE.MeshPhongMaterial( { color: misc.textColor, shading: THREE.FlatShading } );
+    return new THREE.Mesh(txgeo,txmat);
+}
+
+misc.nodeLabel = function(n){
+    n.label = misc.addLabel(n.id, misc.fontSize*n.size / n.id.length, misc.height*n.size);
+    var p = n.node.position;
+    n.label.geometry.computeBoundingBox();
+    var w = n.label.geometry.boundingBox.max.x - n.label.geometry.boundingBox.min.x
+    var h = n.label.geometry.boundingBox.max.y - n.label.geometry.boundingBox.min.y;
+    n.label.position.set(p.x - w/2,p.y - h/2,p.z); // to center text
+    scene.add(n.label);
+}
+
+misc.labelRecolor = function(){
+    for (var i in nodes){
+        if (nodes[i].label !== undefined){
+            nodes[i].label.material.color.set(misc.textColor);
+        }
+    }
+}
+
+misc.labelRedraw = function(){
+    for (var i in nodes){
+        if (nodes[i].label !== undefined){
+            removeMesh(nodes[i].label);
+            nodes[i].label = null;
+            misc.nodeLabel(nodes[i]);
+        }
+    }
+}

@@ -102,7 +102,7 @@ function onDocumentMouseDown( event ) {
         // if (intersects[ 0 ].object.geometry.type == "TetrahedronGeometry"){
         // vars.nodeGeometry.includes(inter...)
         if (intersects[0].object.geometry.type == vars.nodeGeometry) {
-            intersects[0].object.material.color.setHex(Math.random() * 0xffffff);
+            // intersects[0].object.material.color.setHex(Math.random() * 0xffffff);
             for (i in nodes) {
                 if (nodes[i].node.id == obid) {
                     console.log("Node ", nodes[i].id);

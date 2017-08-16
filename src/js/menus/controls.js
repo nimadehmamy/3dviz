@@ -1,6 +1,6 @@
 var controls = new function(){
     this.scale = 1;
-    this.nodeSize = 1.0;
+    this.nodeSize = 2.0;
     this.nodeExp = 1.0;
     //this.nodeColor = '#0000ff';
 	  this.nodeColor = '#ede7e4';
@@ -38,7 +38,14 @@ guiNode.add(controls, 'nodeSize', 0.0001, 10).step(0.001).onFinishChange(redrawN
 guiNode.add(controls, 'nodeDetail', 0, 10).step(1).onFinishChange(redrawNodes);
 guiNode.add(controls, 'nodeExp', 0, 2).onFinishChange(redrawNodes);
 guiNode.addColor(controls, 'nodeColor').onChange(recolorNodes);
+controls.nodeGroupColor = false;
+guiNode.add(controls, 'nodeGroupColor').onChange(function(){
+    if (controls.nodeGroupColor) nodeGroupColor();
+    else recolorNodes();
+});
 
+
+//----------
 guiEdge.add(controls, 'edgeDiameter', 0.001, 4).step(0.01).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeSegments', 1, 200).step(1).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeCross', 3, 100).step(1).onFinishChange(redrawEdges);
@@ -81,8 +88,9 @@ guiCamera.add(misc, 'rotateCam').onChange(function(){
         clearTimeout(misc.rotCamTO);
     }
 });
-guiCamera.add(misc, 'r', 0.0001,100);
-guiCamera.add(misc, 'camSpeed', 0.001,.1);
+guiCamera.add(misc, 'camDist', 0.0001,100);
+guiCamera.add(misc, 'camHeight', 0,3);
+guiCamera.add(misc, 'camSpeed', 0.001,0.1);
 
 
 
@@ -99,6 +107,10 @@ guiMisc.add(controls, 'axisHelper').onChange(function(){
         scene.add( axisHelper );
     }else scene.remove( axisHelper );
 
-})
+});
 
+var guiText = guiMisc.addFolder('Text');
+guiMisc.add(misc, 'fontSize', 0.1,20).onChange(misc.labelRedraw);
+guiMisc.add(misc, 'textExtrusion', 1,2).onChange(misc.labelRedraw);
+guiMisc.addColor(misc, 'textColor').onChange(misc.labelRecolor);
 

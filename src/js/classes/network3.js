@@ -21,10 +21,16 @@ var network = {
     var detail = controls.nodeDetail;
     
     this.geometry = new THREE.TetrahedronGeometry( this.size, detail );
-    this.material = new THREE.MeshLambertMaterial( {
-      color: this.color,
-      vertexColors: THREE.FaceColors,
-    });
+    // this.material = new THREE.MeshLambertMaterial( {
+    //   color: this.color,
+    //   vertexColors: THREE.FaceColors,
+    // });
+    this.material = new THREE.MeshPhongMaterial( {
+        color: this.color,
+        emissive: 0x072534,
+        //side: THREE.DoubleSide,
+        shading: THREE.SmoothShading // THREE.FlatShading
+    } );
     this.node = new THREE.Mesh( this.geometry, this.material );
     this.position = this.node.position;
     this.position.set(v.x,v.y,v.z);
@@ -66,12 +72,20 @@ var network = {
     
     //console.log(xshape, shape);
     this.geometry = new THREE.ExtrudeGeometry( this.shape, this.extrudeSettings );
-    this.material = new THREE.MeshLambertMaterial( {
-      color: col,
-      opacity: op,
-      transparent: true,
-      side: THREE.DoubleSide,
-    } );//, wireframe: true MeshBasicMaterial
+    // this.material = new THREE.MeshLambertMaterial( {
+    //   color: col,
+    //   opacity: op,
+    //   transparent: true,
+    //   side: THREE.DoubleSide,
+    // } );//, wireframe: true MeshBasicMaterial
+    this.material = new THREE.MeshPhongMaterial( {
+        color: col,
+        // emissive: 0x072534,
+        opacity: op,
+        transparent: true,
+        //side: THREE.DoubleSide,
+        shading: THREE.SmoothShading // THREE.FlatShading
+    } );
     this.mesh = new THREE.Mesh( this.geometry, this.material );
     this.points = pts;
     if (!hide){
