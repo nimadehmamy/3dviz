@@ -44,6 +44,7 @@ function recolorEdges(){
     for (var i in edges) {
         var col = (controls.edgeColorRandom ? Math.random() * 0xffffff : controls.edgeColor);
         edges[i].link.material.color.set(col);
+        edges[i].link.material.opacity = controls.edgeOpacity;
     }
 }
 
@@ -53,6 +54,20 @@ function recolorNodes(){
     }
 }
 
+function nodeGroupColor(){
+    var gr = network.info.info.nodes.groups;
+    /*
+    cols = {};
+    for (var i in nodes){
+        cols[gr[i]] = Math.random() * 0xffffff;
+    }
+    */
+    var cols = network.info.info.nodes.colors;
+    for (var i in nodes) {
+        var n = nodes[i];
+        n.node.material.color.set(cols[gr[i]]); //(cols[gr[i]]);
+    }
+}
 
 
 var raycaster, mouse;

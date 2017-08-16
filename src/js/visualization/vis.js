@@ -57,7 +57,7 @@ var Viz = function(data,name){
     controls.scale = 1 / data.scale;
     redrawEdges();
     // redrawNodes();
-    degrees = network.getDegrees(edges);
+    degrees = network.getDegreesRMS(edges);
     //nodes_loc = network.info.nodes.positions;
     nodes = network.get_nodes(network.info.nodes.positions, center = false, sizes = degrees);
     

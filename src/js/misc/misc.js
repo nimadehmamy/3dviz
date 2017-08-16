@@ -181,3 +181,14 @@ misc.growEdge = function(){
         };
     }
 }
+
+misc.theta = 0;
+misc.r = 50;
+misc.camSpeed = 0.02;
+misc.rotCam = function() {
+    misc.theta += misc.camSpeed;
+    camera.position.set(misc.r * Math.cos(misc.theta), misc.r, misc.r * Math.sin(misc.theta));
+    camera.lookAt({ x: 0, y: 0, z: 0 });
+    misc.rotCamTO = setTimeout("misc.rotCam()", 20);
+}
+

@@ -10,7 +10,7 @@ var controls = new function(){
     this.nodeDetail = 3;
     this.edgeCross = 8;
     this.edgeStarriness = .0;
-    this.edgeColorRandom = true;
+    this.edgeColorRandom = false;
     //this.edgeColor = '#ffffff';
 	  this.edgeColor = '#0070c0';
 
@@ -34,9 +34,9 @@ function background(){
   renderer.setClearColor( parseInt(controls.background.slice(1),16),1);
 }
 
-guiNode.add(controls, 'nodeSize', 0.0001, 2000).step(0.001).onFinishChange(redrawNodes);
+guiNode.add(controls, 'nodeSize', 0.0001, 10).step(0.001).onFinishChange(redrawNodes);
 guiNode.add(controls, 'nodeDetail', 0, 10).step(1).onFinishChange(redrawNodes);
-guiNode.add(controls, 'nodeExp', 0.1, 2).onFinishChange(redrawNodes);
+guiNode.add(controls, 'nodeExp', 0, 2).onFinishChange(redrawNodes);
 guiNode.addColor(controls, 'nodeColor').onChange(recolorNodes);
 
 guiEdge.add(controls, 'edgeDiameter', 0.001, 4).step(0.01).onFinishChange(redrawEdges);
@@ -47,7 +47,7 @@ guiEdge.addColor(controls, 'edgeColor').onChange(recolorEdges);
 
 guiEdge.add(controls, 'edgeColorRandom').onFinishChange(recolorEdges);
 
-guiEdge.add(controls, 'edgeOpacity', 0.0, 1).onFinishChange(recolorEdges);
+guiEdge.add(controls, 'edgeOpacity', 0.0, 1).onChange(recolorEdges);
 
 
 var guiCamera = gui.addFolder('Camera');
@@ -61,17 +61,29 @@ guiCamera.add(controls,'follow').onChange(function(){
 
 
 controls.offset = 0.002;
-guiCamera.add(controls,'offset', 0.0001,.01);
+// guiCamera.add(controls,'offset', 0.0001,.01);
 
-controls.camHelper = false;
-guiCamera.add(controls, 'camHelper').onChange(function(){
-    if (controls.camHelper === false) {
-        scene.remove(cameraHelper);
-    }
-    else {
-        scene.add(cameraHelper);
+// controls.camHelper = false;
+// guiCamera.add(controls, 'camHelper').onChange(function(){
+//     if (controls.camHelper === false) {
+//         scene.remove(cameraHelper);
+//     }
+//     else {
+//         scene.add(cameraHelper);
+//     }
+// });
+
+misc.rotateCam = false;
+guiCamera.add(misc, 'rotateCam').onChange(function(){
+    if (misc.rotateCam){
+        misc.rotCam();
+    }else{
+        clearTimeout(misc.rotCamTO);
     }
 });
+guiCamera.add(misc, 'r', 0.0001,100);
+guiCamera.add(misc, 'camSpeed', 0.001,.1);
+
 
 
 var guiMisc = gui.addFolder('Misc.');

@@ -123,6 +123,23 @@ var network = {
     }
     return k;
   },
+  
+  getDegreesRMS : function(edges){
+    var k = {};
+    for (var ii in edges){
+        var i = edges[ii].endPoints;
+        var r2 = Math.pow(edges[ii].size,2);
+        if (k[i[0]]) { k[i[0]] += r2; }
+        else { k[i[0]] = r2; }
+        if (k[i[1]]) { k[i[1]] += r2; }
+        else { k[i[1]] = r2; }
+    }
+    // RMS
+    for (var i in k){
+        k[i] = Math.sqrt(k[i]);
+    }
+    return k;
+  },
   getDegrees0 : function(edges){
     var k = {};
     for (var ii in edges){
@@ -149,7 +166,7 @@ var network = {
       if (!sizes){ var sz = 1; }
       else{ var sz = sizes[i];}
       console.log('size',i,':',sz);
-      var ns = network.sizeFunc(controls.scale*controls.nodeSize*sz);
+      var ns = controls.nodeSize*network.sizeFunc(controls.scale*sz);
       console.log(ns);
       var ii = nodeloc[i];
       id = i;
