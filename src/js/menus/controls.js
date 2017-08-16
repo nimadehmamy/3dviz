@@ -37,17 +37,17 @@ function background(){
 guiNode.add(controls, 'nodeSize', 0.0001, 2000).step(0.001).onFinishChange(redrawNodes);
 guiNode.add(controls, 'nodeDetail', 0, 10).step(1).onFinishChange(redrawNodes);
 guiNode.add(controls, 'nodeExp', 0.1, 2).onFinishChange(redrawNodes);
-guiNode.addColor(controls, 'nodeColor').onChange(redrawNodes);
+guiNode.addColor(controls, 'nodeColor').onChange(recolorNodes);
 
 guiEdge.add(controls, 'edgeDiameter', 0.001, 4).step(0.01).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeSegments', 1, 200).step(1).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeCross', 3, 100).step(1).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeStarriness', -.9,.9 ).step(.01).onFinishChange(redrawEdges);
-guiEdge.addColor(controls, 'edgeColor').onChange(redrawEdges);
+guiEdge.addColor(controls, 'edgeColor').onChange(recolorEdges);
 
-guiEdge.add(controls, 'edgeColorRandom').onFinishChange(redrawEdges);
+guiEdge.add(controls, 'edgeColorRandom').onFinishChange(recolorEdges);
 
-guiEdge.add(controls, 'edgeOpacity', 0.0, 1).onFinishChange(redrawEdges);
+guiEdge.add(controls, 'edgeOpacity', 0.0, 1).onFinishChange(recolorEdges);
 
 
 var guiCamera = gui.addFolder('Camera');

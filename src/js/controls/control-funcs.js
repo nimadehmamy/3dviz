@@ -1,10 +1,19 @@
-
+function removeMesh(v) {
+    if (v!== undefined){
+        v.material.dispose();
+        v.geometry.dispose();
+        scene.remove(v);
+    }else{
+        console.log('undef!!!')
+    }
+}
 
 function redrawEdges(){
-    console.log('change');
+    console.log('redrawing links...');
     for (var i in edges) {
         var col = (controls.edgeColorRandom ? Math.random() * 0xffffff : controls.edgeColor);
-        scene.remove(edges[i].link.mesh);
+        //scene.remove(edges[i].link.mesh);
+        removeMesh(edges[i].link.mesh);
         edges[i].link = new network.linkWithCrossSection(
             edges[i].points, edges[i].size * controls.edgeDiameter, controls.edgeSegments, col //Math.random() * 0xffffff
             , undefined, undefined //starryness = .1
@@ -15,7 +24,8 @@ function redrawEdges(){
 function redrawNodes(){
     console.log('redrawing nodes...');
     for (var i in nodes) {
-        scene.remove(nodes[i].node);
+        // scene.remove(nodes[i].node);
+        removeMesh(nodes[i].node);
     }
     nodes = network.get_nodes(network.info.nodes.positions, center = false, sizes = degrees
         //   , sizeFunc = function(s){return Math.abs(controls.scale)*controls.nodeSize*network.sizeFunc(s)}
@@ -29,6 +39,19 @@ function redrawAll(){
   redrawEdges();
 }
 
+
+function recolorEdges(){
+    for (var i in edges) {
+        var col = (controls.edgeColorRandom ? Math.random() * 0xffffff : controls.edgeColor);
+        edges[i].link.material.color.set(col);
+    }
+}
+
+function recolorNodes(){
+    for (var i in nodes) {
+        nodes[i].material.color.set(controls.nodeColor);
+    }
+}
 
 
 
