@@ -218,29 +218,69 @@ misc.addLabel = function(label,s,h){
 }
 
 misc.nodeLabel = function(n){
-    n.label = misc.addLabel(n.id, misc.fontSize*n.size / n.id.length, misc.height*n.size);
+    n.label = misc.addLabel(n.id, misc.fontSize*n.size / n.id.length, misc.textExtrusion*n.size);
     var p = n.node.position;
     n.label.geometry.computeBoundingBox();
     var w = n.label.geometry.boundingBox.max.x - n.label.geometry.boundingBox.min.x
     var h = n.label.geometry.boundingBox.max.y - n.label.geometry.boundingBox.min.y;
     n.label.position.set(p.x - w/2,p.y - h/2,p.z); // to center text
     scene.add(n.label);
+    // n.labelOn = true;
+}
+
+misc.nodeLabel2 = function(n){
+    n.label = new misc.LabelClass(n)
+}
+
+misc.LabelClass = function(n){
+    this.mesh = misc.addLabel(n.id, misc.fontSize*n.size / n.id.length, misc.textExtrusion*n.size);
+    var p = n.node.position;
+    this.mesh.geometry.computeBoundingBox();
+    var w = this.mesh.geometry.boundingBox.max.x - this.mesh.geometry.boundingBox.min.x
+    var h = this.mesh.geometry.boundingBox.max.y - this.mesh.geometry.boundingBox.min.y;
+    this.mesh.position.set(p.x - w/2,p.y - h/2,p.z); // to center text
+    scene.add(this.mesh);
+    this.on = true;
+    this.destroy = function(){
+        removeMesh(this.mesh);
+        this.on = false;
+        this.mesh = null;
+    }
 }
 
 misc.labelRecolor = function(){
     for (var i in nodes){
-        if (nodes[i].label !== undefined){
-            nodes[i].label.material.color.set(misc.textColor);
-        }
+        var l = nodes[i].label;
+        if (l) { if (l.on) { l.mesh.material.color.set(misc.textColor); } }
     }
 }
 
 misc.labelRedraw = function(){
-    for (var i in nodes){
-        if (nodes[i].label !== undefined){
-            removeMesh(nodes[i].label);
-            nodes[i].label = null;
-            misc.nodeLabel(nodes[i]);
+    for (var i in nodes) {
+        var l = nodes[i].label;
+        if (l) {
+            if (l.on) {
+                l.destroy();
+                misc.nodeLabel2(nodes[i]);
+            }
         }
     }
+}
+
+
+misc.textMin = 0.1;
+misc.getNodeLabels = function() {
+    for (var i in nodes) {
+        var l = nodes[i].label;
+        if (nodes[i].size > misc.textMin) {
+            // node is the right size. update label
+            if (l){ if (l.on) continue; }
+            else misc.nodeLabel2(nodes[i]);
+        }
+        else {
+            if (l) { if (l.on) l.destroy(); }
+            // nodes[i].label = undefined;
+        }
+    }
+    // misc.labelRedraw();
 }

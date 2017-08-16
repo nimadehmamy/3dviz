@@ -5,6 +5,7 @@ function removeMesh(v) {
         scene.remove(v);
         v.material = null;
         v.geometry = null;
+        v = null;
         
     }else{
         console.log('undef!!!')

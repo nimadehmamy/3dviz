@@ -109,8 +109,8 @@ guiMisc.add(controls, 'axisHelper').onChange(function(){
 
 });
 
-var guiText = guiMisc.addFolder('Text');
-guiMisc.add(misc, 'fontSize', 0.1,20).onChange(misc.labelRedraw);
-guiMisc.add(misc, 'textExtrusion', 1,2).onChange(misc.labelRedraw);
-guiMisc.addColor(misc, 'textColor').onChange(misc.labelRecolor);
-
+var guiText = guiNode.addFolder('Text');
+guiText.add(misc, 'fontSize', 0.1,20).onChange(misc.labelRedraw);
+guiText.add(misc, 'textExtrusion', 1,2).onChange(misc.labelRedraw);
+guiText.addColor(misc, 'textColor').onChange(misc.labelRecolor);
+guiText.add(misc, 'textMin', 0,2).onFinishChange(misc.getNodeLabels);
