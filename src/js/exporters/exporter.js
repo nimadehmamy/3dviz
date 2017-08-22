@@ -18,12 +18,12 @@ var exporter = {
     dlGroupObjs: function() {
         // remove all nodes and links from scene
         var groups = network.info.info.nodes.groups;
-        for (var i in nodes) removeMesh(nodes[i].node);
+        for (var i in nodes) scene.remove(nodes[i].node);
 
         var res = exporter.exportToObj();
         var fnam = "Links";
         download(res, fnam + ".obj", "text/plain");
-        for (i in edges) removeMesh(edges[i].link.mesh);
+        for (i in edges) scene.remove(edges[i].link.mesh);
 
         var groupnodes = {};
         for (i in groups) {
@@ -48,7 +48,7 @@ var exporter = {
                 k = groupnodes[i][j];
                 n = nodes[k];
                 if (n === undefined) continue;
-                removeMesh(n.node);
+                scene.remove(n.node);
             }
         }
     }
