@@ -89,6 +89,7 @@ network.makeLinks = function(){
 function animate() {
 	requestAnimationFrame( animate );
 	render();
+	cameraCtrl.update();
 	stats.update();
 	if (controls.grow) misc.growEdge();
 }

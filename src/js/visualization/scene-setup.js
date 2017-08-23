@@ -6,15 +6,6 @@ var scene, camera, cameraCtrl, renderer;
 container = document.getElementById('canvas-container');
 scene = new THREE.Scene();
 
-// ---- camera
-camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-
-camera.position.z = 15;
-// camera orbit control
-cameraCtrl = new THREE.OrbitControls(camera, container);
-cameraCtrl.object.position.y = 50;
-cameraCtrl.update();
-
 // ---- renderer
 renderer = new THREE.WebGLRenderer({
 	antialias: true,
@@ -25,6 +16,19 @@ renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setClearColor( 0xffffff,1);//0x232329 0xffffff
 renderer.setSize(window.innerWidth, window.innerHeight);
 container.appendChild(renderer.domElement);
+
+
+// ---- camera
+camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+
+camera.position.z = 15;
+// camera orbit control
+
+// cameraCtrl = new THREE.OrbitControls(camera, container);
+cameraCtrl = new THREE.TrackballControls(camera, container);
+cameraCtrl.object.position.y = 50;
+cameraCtrl.update();
+
 
 // ---- stats
 stats = new Stats();
