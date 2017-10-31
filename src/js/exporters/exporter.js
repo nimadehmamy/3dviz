@@ -1,4 +1,21 @@
 var exporter = {
+    exportToObjMtl: function(name) {
+        var exporter = new THREE.OBJMTLExporter();
+        var result = exporter.parse(scene,name);
+        //floatingDiv.style.display = 'block';
+        //floatingDiv.innerHTML = result.split ('\n').join ('<br />');
+        return result;
+    },
+
+    dlObjMtl: function() {
+        var name = prompt("Enter file name");
+        var res = exporter.exportToObjMtl(name);
+        //dl.href="data:text/plain,"+encodeURIComponent(res);
+        //dl.click();
+        download(res.obj, name + ".obj", "text/plain")
+        download(res.mtl, name + ".mtl", "text/plain")
+    },
+    
     exportToObj: function() {
         var exporter = new THREE.OBJExporter();
         var result = exporter.parse(scene);
