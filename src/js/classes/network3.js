@@ -31,6 +31,7 @@ var network = {
         //side: THREE.DoubleSide,
         shading: THREE.SmoothShading // THREE.FlatShading
     } );
+    
     this.node = new THREE.Mesh( this.geometry, this.material );
     this.position = this.node.position;
     this.position.set(v.x,v.y,v.z);
@@ -78,14 +79,39 @@ var network = {
     //   transparent: true,
     //   side: THREE.DoubleSide,
     // } );//, wireframe: true MeshBasicMaterial
-    this.material = new THREE.MeshPhongMaterial( {
-        color: col,
-        // emissive: 0x072534,
-        opacity: op,
-        transparent: true,
-        //side: THREE.DoubleSide,
-        shading: THREE.SmoothShading // THREE.FlatShading
-    } );
+    this.material = new THREE.MultiMaterial([
+        new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.FlatShading } ), // front
+        new THREE.MeshPhongMaterial( {
+            color: col,
+            // emissive: 0x072534,
+            opacity: op,
+            transparent: true,
+            //side: THREE.DoubleSide,
+            shading: THREE.SmoothShading
+        } ) // side
+    ]);
+    
+    
+    this.geometry.computeBoundingBox();
+    this.geometry.computeVertexNormals();
+    
+    // for ( var i = 0; i < this.geometry.faces.length; i ++ ) {
+    //     var face = this.geometry.faces[ i ];
+    //     if (face.materialIndex == 1 ) {
+    //         for ( var j = 0; j < face.vertexNormals.length; j ++ ) {
+    //             face.vertexNormals[ j ].z = 0;
+    //             face.vertexNormals[ j ].normalize();
+    //         }
+    //     }
+    // }
+    // this.material = new THREE.MeshPhongMaterial( {
+    //     color: col,
+    //     // emissive: 0x072534,
+    //     opacity: op,
+    //     transparent: true,
+    //     //side: THREE.DoubleSide,
+    //     shading: THREE.SmoothShading // THREE.FlatShading
+    // } );
     this.mesh = new THREE.Mesh( this.geometry, this.material );
     this.points = pts;
     if (!hide){

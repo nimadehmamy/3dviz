@@ -1,6 +1,12 @@
 function removeMesh(v) {
     if (v!== undefined){
-        v.material.dispose();
+        try{
+            v.material.dispose();
+        }catch(err){
+            for(var i in v.material.materials){
+                v.material.materials[i].dispose();
+            }
+        }
         v.geometry.dispose();
         scene.remove(v);
         v.material = null;
@@ -47,10 +53,17 @@ function redrawAll(){
 function recolorEdges(){
     for (var i in edges) {
         var col = (controls.edgeColorRandom ? Math.random() * 0xffffff : controls.edgeColor);
-        edges[i].link.material.color.set(col);
-        edges[i].link.material.opacity = controls.edgeOpacity;
+        try {
+            edges[i].link.material.color.set(col);
+            edges[i].link.material.opacity = controls.edgeOpacity;
+        }
+        catch (err) {
+            edges[i].link.material.materials[1].color.set(col);
+            edges[i].link.material.materials[1].opacity = controls.edgeOpacity;
+        }
     }
 }
+
 
 function recolorNodes(){
     for (var i in nodes) {

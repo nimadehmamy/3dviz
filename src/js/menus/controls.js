@@ -1,14 +1,14 @@
 var controls = new function(){
     this.scale = 1;
-    this.nodeSize = 2.0;
+    this.nodeSize = 1.2;
     this.nodeExp = 1.0;
     //this.nodeColor = '#0000ff';
 	  this.nodeColor = '#ede7e4';
     this.edgeDiameter = 1.;
-    this.edgeSegments = 20;
+    this.edgeSegments = 10;
     this.edgeOpacity = 1;
     this.nodeDetail = 3;
-    this.edgeCross = 8;
+    this.edgeCross = 3;
     this.edgeStarriness = .0;
     this.edgeColorRandom = false;
     //this.edgeColor = '#ffffff';
