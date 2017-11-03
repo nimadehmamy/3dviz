@@ -174,8 +174,13 @@ THREE.OBJMTLExporter.prototype = {
 		mtlOutput += 'Tr 0.0000\n';
 		mtlOutput += 'Tf 1.0000 1.0000 1.0000\n';
 		mtlOutput += 'illum 2\n';
-		mtlOutput += 'Ka ' + mat.color.r + ' ' + mat.color.g + ' ' + mat.color.b + ' ' + '\n';
-		mtlOutput += 'Kd ' + mat.color.r + ' ' + mat.color.g + ' ' + mat.color.b + ' ' + '\n';
+		try{
+		    mtlOutput += 'Ka ' + mat.color.r + ' ' + mat.color.g + ' ' + mat.color.b + ' ' + '\n';
+		    mtlOutput += 'Kd ' + mat.color.r + ' ' + mat.color.g + ' ' + mat.color.b + ' ' + '\n';
+		}catch(err){
+		    mtlOutput += 'Ka ' + mat.materials[1].color.r + ' ' + mat.materials[1].color.g + ' ' + mat.materials[1].color.b + ' ' + '\n';
+		    mtlOutput += 'Kd ' + mat.materials[1].color.r + ' ' + mat.materials[1].color.g + ' ' + mat.materials[1].color.b + ' ' + '\n';
+		}
 		mtlOutput += 'Ks 0.0000 0.0000 0.0000\n';
 		mtlOutput += 'Ke 0.0000 0.0000 0.0000\n';
           

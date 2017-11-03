@@ -37,6 +37,15 @@ var network = {
     this.position.set(v.x,v.y,v.z);
     this.degree = 0;
   },
+  linkXShape: function(radius, w,st){
+      var xshape = [], count = w*(controls.edgeSimple ? 1 : 3);
+      for ( var i = 0; i < count; i ++ ) {
+          var a = 2 * i / count * Math.PI;
+          var r = radius * (1 - st * Math.cos(w * a)) * Math.abs(controls.scale);
+          xshape.push(new THREE.Vector2(Math.cos(a) * r, Math.sin(a) * r));
+      }
+      return xshape;
+  },
 
   linkWithCrossSection: function(points ,radius, segs, color, wings,starryness, hide, opacity){
       
@@ -50,13 +59,14 @@ var network = {
     // if (controls.edgeColorRandom){
     //     col = Math.random() * 0xffffff;
     // }
-    console.log("starryness:", st, col)
-    var xshape = [], count = w*3;
-    for ( var i = 0; i < count; i ++ ) {
-    	var a = 2 * i / count * Math.PI;
-    	var r = radius * ( 1 - st * Math.cos( w * a )) * Math.abs(controls.scale);
-    	xshape.push( new THREE.Vector2 ( Math.cos( a ) * r, Math.sin( a ) * r ) );
-    }
+    //console.log("starryness:", st, col)
+    // var xshape = [], count = w*3;
+    // for ( var i = 0; i < count; i ++ ) {
+    // 	var a = 2 * i / count * Math.PI;
+    // 	var r = radius * ( 1 - st * Math.cos( w * a )) * Math.abs(controls.scale);
+    // 	xshape.push( new THREE.Vector2 ( Math.cos( a ) * r, Math.sin( a ) * r ) );
+    // }
+    var xshape = network.linkXShape(radius,w,st);
     if (points.length <2) {
       console.log('!!! Not enough points!!');
       this.mesh = 'hi';

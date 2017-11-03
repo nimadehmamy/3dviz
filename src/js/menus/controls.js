@@ -8,6 +8,7 @@ var controls = new function(){
     this.edgeSegments = 10;
     this.edgeOpacity = 1;
     this.nodeDetail = 3;
+    this.edgeSimple = true;
     this.edgeCross = 3;
     this.edgeStarriness = .0;
     this.edgeColorRandom = false;
@@ -49,6 +50,8 @@ guiNode.add(controls, 'nodeGroupColor').onChange(function(){
 guiEdge.add(controls, 'edgeDiameter', 0.001, 4).step(0.01).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeSegments', 1, 200).step(1).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeCross', 3, 100).step(1).onFinishChange(redrawEdges);
+guiEdge.add(controls, 'edgeSimple' ).onFinishChange(redrawEdges);
+
 guiEdge.add(controls, 'edgeStarriness', -.9,.9 ).step(.01).onFinishChange(redrawEdges);
 guiEdge.addColor(controls, 'edgeColor').onChange(recolorEdges);
 
