@@ -67,6 +67,7 @@ var Viz = function(data,name){
     };
 
     render();
+    centerCamera();
 } // Vizz
 
 network.makeLinks = function(){

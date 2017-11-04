@@ -166,3 +166,17 @@ function render() {
 	}
 	renderer.render( scene, controls.follow === true ? splineCamera : camera );
 }
+
+
+function centerCamera(){
+    var ii = 0, com = {x:0,y:0,z:0};
+    for (i in nodes){
+        ii++;
+        p = nodes[i].node.position;
+        com.x += p.x;
+        com.y += p.y;
+        com.z += p.z;
+    }
+    com.x /= ii; com.y/=ii; com.z/=ii;
+    cameraCtrl.target.set(com.x,com.y,com.z);
+}
