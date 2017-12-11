@@ -12,8 +12,8 @@ function removeMesh(v) {
         v.geometry.dispose();
         v.geometry = null;
         v.material = null;
-
         v = null;
+        delete(v);
 
     }else{
         console.log('undef!!!')
@@ -25,13 +25,9 @@ var faceCount,edgeIndex={};
 function redrawEdges(){
     network.makeLinkMesh();
 }
+
 function redrawNodes(){
     console.log('redrawing nodes...');
-    network.nodeGroup.children = [];
-    for (var i in network.nodes) {
-        removeMesh(network.nodes[i].mesh);
-        // removeMesh(network.nodeGroup[i]);
-    }
     network.makeNodes(network.info.nodes.positions, sizes = network.degrees);
 }
 

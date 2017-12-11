@@ -7,42 +7,32 @@ Network class
 
 
 function Network(name, data){
-    net = this;
+    var net = this;
     console.log('net:',data);
     this.nodes = {};
     this.links = {};
     this.nodeGroup = new THREE.Object3D();
     this.linkGroup = new THREE.Object3D();
-    
+
     this.info = data;
 
-    this.Node = function(id,v,s, color){
+    this.Node = function(id, s, color){
         /* make node with id at v (vector) and with size s
         */
         this.type = 'node';
         this.color = color || controls.nodeColor; //nodecolor
         this.id = id;
         this.size = s;
-        
         this.geometry = new THREE.TetrahedronGeometry( this.size, controls.nodeDetail );
-        this.material = new THREE.MeshPhongMaterial( {
-            color: this.color,
-            shininess: 256,
-            shading: THREE.SmoothShading // THREE.FlatShading
-        } );
-        
-        this.mesh = new THREE.Mesh( this.geometry, this.material );
-        this.mesh.name = "Node: " + id;
-        this.mesh.position.set(v.x,v.y,v.z);
         this.degree = 0;
     };
-    
+
     this.Link = function(id, data){
         this.type ='link';
         this.id = id;
         this.data = data;
     };
-    
+
     this.LinkGeometry = function(data){
         var xshape = net.linkXShape(data.radius * controls.edgeDiameter);
         if (data.points.length < 2) {
@@ -59,11 +49,11 @@ function Network(name, data){
         if (controls.lines) {
             this.material = new THREE.LineBasicMaterial({
                 color: controls.edgeColor,
-                linewidth: Link.data.radius * 2
+                linewidth: 10//Link.data.radius * 2
             });
             this.geometry = new THREE.Geometry();
             this.geometry.vertices = this.spline.getPoints(controls.edgeSegments);
-            this.mesh = new THREE.Line(this.geometry, this.material);
+            //this.mesh = new THREE.Line(this.geometry, this.material);
         }
         else {
             this.shape = new THREE.Shape(xshape);
@@ -73,7 +63,7 @@ function Network(name, data){
             // this.geometry.name = "Link: " + id;
         }
     };
-    
+
     this.linkXShape = function(radius, wings, starryness){
          var w = wings || controls.edgeCross //ngon
             ,st = starryness || controls.edgeStarriness //starry
@@ -86,7 +76,7 @@ function Network(name, data){
         }
         return xshape;
     };
-    
+
     this.makeLinks = function(){
         nid = net.info.links;
         net.links = {}; // reset
@@ -96,10 +86,12 @@ function Network(name, data){
         }
         net.makeLinkMaterials();
         net.makeLinkMesh();
-        // scene.add(net.linksMergedMesh);
     };
-    
+
     this.makeNodes = function(nodeloc, sizes){
+        removeMesh(net.mergedNodeMesh);
+        this.nodesMergedGeometry = new THREE.Geometry();
+        var matrix = new THREE.Matrix4();
         var c = controls.scale;
         net.nodes = {}; // reset
         for (var i in nodeloc) {
@@ -108,36 +100,52 @@ function Network(name, data){
             var p = nodeloc[i];
             id = i;
             if (net.info.nodes.labels) { id = net.info.nodes.labels[i]; }
-            
-            net.nodes[id] = new net.Node(id, new THREE.Vector3(c * p[0], -c * p[1], c * p[2]), ns);
-            net.nodeGroup.add(net.nodes[id].mesh);
-            // net.nodes[id].mesh.name = "Node: " + id;
-            scene.add(net.nodes[id].mesh);
+            net.nodes[id] = new net.Node(id, ns);
+            matrix.makeTranslation(c * p[0], -c * p[1], c * p[2]);
+            net.nodesMergedGeometry.merge(net.nodes[id].geometry, matrix);
+            net.nodes[id].geometry.dispose();
+            net.nodes[id].geometry = null;
         }
-        net.nodeGroup.name = "nodeGroup";
-        // scene.add(net.nodeGroup);
-        // return nodes;
+        net.makeNodeMaterials();
+        this.mergedNodeMesh = new THREE.Mesh(net.nodesMergedGeometry, net.nodeMaterial);
+        scene.add(net.mergedNodeMesh);
     };
-    
+
+
+    this.makeNodeMaterials = function(){
+      this.nodeMaterial = new THREE.MeshPhongMaterial( {
+        color: controls.nodeColor,
+        emissive: 0x072534,
+        shininess: 512,
+        shading: THREE.SmoothShading // THREE.FlatShading
+      } );
+    };
+
     this.makeLinkMaterials = function(){
         net.linkMaterials = new THREE.MultiMaterial([]);
         if (controls.edgeColorRandom){
             for (var i in net.links) {
                 net.linkMaterials.materials.push(new THREE.MeshPhongMaterial( {
                     color: Math.random() * 0xffffff,
-                    transparent:true, shininess: 256, shading: THREE.SmoothShading }));
+                    transparent:true,
+                    shininess: 256,
+                    shading: THREE.SmoothShading }));
             }
         }else{
-            net.linkMaterials.materials.push(new THREE.MeshBasicMaterial({
-                color: 0xffffff }),
-                new THREE.MeshPhongMaterial({color: controls.edgeColor,
-                transparent:true, shininess: 256, shading: THREE.SmoothShading }));
+            net.linkMaterials.materials.push(
+              //new THREE.MeshBasicMaterial({color: 0xffffff }),
+                new THREE.MeshPhongMaterial({
+                color: controls.edgeColor,
+                transparent:true,
+                shininess: 256,
+                shading: THREE.SmoothShading })
+            );
         }
     };
-    
+
     this.faceCount = 0;
     this.edgeIndex = {};
-    
+
     this.makeLinkMesh = function(){
         net.linkGroup.children = [];
         removeMesh(net.linksMergedMesh);
@@ -155,14 +163,19 @@ function Network(name, data){
                     net.linksMergedGeometry.faces[ii*net.faceCount+j].materialIndex = ii;
                 }
             }
+            else{
+              for(var j=0; j<net.faceCount; j++){
+                net.linksMergedGeometry.faces[ii*net.faceCount+j].materialIndex = 0;
+              }
+            }
             ii++;
         }
         net.linksMergedMesh = new THREE.Mesh(net.linksMergedGeometry, net.linkMaterials);
         net.linksMergedMesh.name = "linkMesh";
         scene.add(net.linksMergedMesh);
-        
+
     }
-    
+
     this.getClickedObject = function(inters){
         var obid;
         if(inters.object.name == "linkMesh"){
@@ -182,7 +195,7 @@ function Network(name, data){
         }
         return pts;
     };
-    
+
     this.getDegreesRMS = function(){
         var k = {};
         for (var ii in net.links) {
@@ -199,16 +212,16 @@ function Network(name, data){
         }
         return k;
     };
-    
+
     this.weightFunc = function(w){
         return Math.asinh(edgethickness * w) / 2.0 + 0.4; //Math.asinh(edgethickness*w)/3+.1;
     };
-    
+
     this.sizeFunc = function(s){
         return Math.pow(s, controls.nodeExp); // take s as volume, thus radius is cubic root
     };
-    
-    
+
+
     net.makeLinks();
     net.degrees = net.getDegreesRMS();
     net.makeNodes(net.info.nodes.positions, sizes = net.degrees);

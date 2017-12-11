@@ -3,6 +3,7 @@ var controls = new function(){
     this.nodeSize = 1.2;
     this.nodeExp = 1.0;
     this.nodeColor = '#ede7e4';
+    this.sameMaterialAsLinks = false;
 
     this.lines = false;
     this.edgeDiameter = 1.;
@@ -38,6 +39,7 @@ guiNode.add(controls, 'nodeGroupColor').onChange(function(){
     if (controls.nodeGroupColor) nodeGroupColor();
     else recolorNodes();
 });
+
 
 
 //----------

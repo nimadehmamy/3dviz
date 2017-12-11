@@ -6,7 +6,7 @@ misc.clickNode();
 
 // nodes may update cam location, so
 
-var network, netName, vars, edge_list, nodes_loc, nodes = {}, degrees, conflicts, mergedMesh;
+var network, netName, vars, edge_list, nodes_loc, nodes = {}, degrees, conflicts, mergedMesh, meregedNodeMesh;
 var Err;
 var Viz = function(data,name){
     console.log(data);
@@ -15,7 +15,7 @@ var Viz = function(data,name){
     nam.innerText = netName;
     network = new Network(netName, data);
     controls.scale = 1 / network.info.scale;
-    
+
     render();
     centerCamera();
 } // Vizz
@@ -37,4 +37,3 @@ animate();
 // use this to stop animation
 // cancelAnimationFrame( rend_id );
 // animate(); // to resume
-
