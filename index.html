@@ -14,27 +14,27 @@
         <script src='src/js/vendor/knockout-3.4.1.js'></script>
 
         <script src='src/js/eventhandling/events.js'></script>
-		
+
 		<style>
 		</style>
 		<link rel="stylesheet" type="text/css" href="src/css/menus.css">
 	</head>
 	<body>
-	    
+
         <div id="canvas-container" title="3D scene"></div>
-        
+
         <div class="center" id="obj">
           <div>
             <span id="netName">Network</span><br>
             <form class ="in" >
-                <!--<input data-bind="value: photoUrl" />-->
+                <!--<input data-bind="value: photoUrl" /> -->
                 <label>
                 <input data-bind="event: {change: $root.fileUpload}" type="file" class="button"/>
                 <div id="choose">Upload Network Json</div>
                 </label>
             </form>
-            
-            
+
+
             <script>
               events.dragAround('obj')
               var ViewModel = function(label) {
@@ -48,20 +48,20 @@
                       var file = e.target.files[0];
                       console.log(file);
                       var reader = new FileReader();
-                  
+
                       reader.onloadend = function(onloadend_e) {
                           var result = reader.result; // Here is your base 64 encoded file. Do with it what you want.
                           Viz(JSON.parse(result), file.name);
                       };
-                  
+
                       if (file) {
                           reader.readAsText(file);
                       }
-                  
+
                   };
-                     
+
               };
-              
+
               ko.applyBindings(new ViewModel()); // This makes Knockout get to work
 
               var vizflag = {};
@@ -77,7 +77,7 @@
                   vizflag[id] = true;
                 }
               }
-              
+
             //   var VizFill = function(id){
             //     VizClear(id);
             //     var d = document.getElementById('ctrl');
@@ -87,9 +87,9 @@
             //     Viz();
             //   }
             </script>
-            
+
           </div>
-          
+
           <!--<div >-->
           <!--    <button class="button" onclick="exporter.dlObj()" style="width:70%;">Download .obj file</button>-->
             <!--<a onclick="exporter.dlObj()" href="#">Download .obj file</a>-->
@@ -101,7 +101,7 @@
             <!--<a id=dl download="network.obj"></a>-->
           </div>
           <div>
-              
+
             <!--<div id="logger" style="width:40%; color:none;padding:none;"> Click elements</div>  style="width:100%;
             color:#939393"-->
           Click to hide:<br> <button class="button" id="logger" onclick="misc.hide()" style="width:50%;">Element</button>
@@ -109,15 +109,15 @@
           <div style="text-align:center;">
               <a href="https://github.com/nimadehmamy/3dviz/" target="_blank">Github</a>
           </div>
-            
+
         </div>
-            
+
         <script src="src/js/vendor/dat.gui.min.js"></script>
-    	  
+
     	<script src="src/js/vendor/danml-download.js"></script>
         <!--<script>download("hello world", "hello.txt", "text/plain")</script>-->
         <script src="src/js/vendor/stats.min.js"></script>
-        
+
         <script src="src/js/vendor/three.min-82.js"></script>
     		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.min.js"></script>
     		-->
@@ -126,7 +126,7 @@
         <script src="src/js/vendor/TrackballControls.js"></script>
         <script src="src/js/vendor/OBJExporter.js"></script>
         <script src="src/js/vendor/STLExporter.js"></script>
-        
+
     	<!--
     	<script src="src/js/classes/network.js">/*define node and link classes, and extras*/</script>
     	-->
@@ -134,7 +134,7 @@
     	<script src="src/js/classes/network3.js">/*define node and link classes, and extras*/</script>
     	<script src="src/js/data-handling/loader.js">/*to load nodes and edges*/</script>
     	<script src="src/js/misc/misc.js">/*Miscellaneous functions*/</script>
-    
+
     	<!--<script src="src/js/visualization/vis-test.js" defer>/* the main script */</script>
     	-->
     	<!--<script src="src/js/visualization/vis-conf-1.js" defer>/* the main script */</script>
@@ -150,8 +150,8 @@
     	<!--<a href="data:application/octet-stream;charset=utf-16le,helloworld">text file</a>
         <br>
         -->
-        
-	  
+
+
 	</body>
-	
+
 </html>
