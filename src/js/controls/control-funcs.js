@@ -1,4 +1,5 @@
 function removeMesh(v) {
+    // console.log("v: ",v);
     if (v!== undefined){
         try{
             v.material.dispose();
@@ -7,67 +8,59 @@ function removeMesh(v) {
                 v.material.materials[i].dispose();
             }
         }
-        v.geometry.dispose();
         scene.remove(v);
-        v.material = null;
+        v.geometry.dispose();
         v.geometry = null;
+        v.material = null;
+
         v = null;
-        
+
     }else{
         console.log('undef!!!')
     }
 }
 
-function redrawEdges(){
-    console.log('redrawing links...');
-    for (var i in edges) {
-        var col = (controls.edgeColorRandom ? Math.random() * 0xffffff : controls.edgeColor);
-        //scene.remove(edges[i].link.mesh);
-        removeMesh(edges[i].link.mesh);
-        edges[i].link = new network.linkWithCrossSection(
-            edges[i].points, edges[i].size * controls.edgeDiameter, controls.edgeSegments, col //Math.random() * 0xffffff
-            , undefined, undefined //starryness = .1
-            , hide = undefined, opacity = controls.edgeOpacity);
-    }
-}
+var faceCount,edgeIndex={};
 
+function redrawEdges(){
+    network.makeLinkMesh();
+}
 function redrawNodes(){
     console.log('redrawing nodes...');
-    for (var i in nodes) {
-        // scene.remove(nodes[i].node);
-        removeMesh(nodes[i].node);
+    network.nodeGroup.children = [];
+    for (var i in network.nodes) {
+        removeMesh(network.nodes[i].mesh);
+        // removeMesh(network.nodeGroup[i]);
     }
-    nodes = network.get_nodes(network.info.nodes.positions, center = false, sizes = degrees
-        //   , sizeFunc = function(s){return Math.abs(controls.scale)*controls.nodeSize*network.sizeFunc(s)}
-    );
-    //
+    network.makeNodes(network.info.nodes.positions, sizes = network.degrees);
 }
-
 
 function redrawAll(){
   redrawNodes();
   redrawEdges();
 }
 
+function toggleRandomEdgeCol(){
+    network.makeLinkMaterials();
+    network.makeLinkMesh();
+}
 
 function recolorEdges(){
-    for (var i in edges) {
-        var col = (controls.edgeColorRandom ? Math.random() * 0xffffff : controls.edgeColor);
-        try {
-            edges[i].link.material.color.set(col);
-            edges[i].link.material.opacity = controls.edgeOpacity;
+    if (controls.edgeColorRandom){
+        var ii = 0;
+        for (var i in network.links) {
+            network.linkMaterials.materials[ii].color.set(Math.random() * 0xffffff);
+            network.linkMaterials.materials[ii++].opacity = controls.edgeOpacity;
         }
-        catch (err) {
-            edges[i].link.material.materials[1].color.set(col);
-            edges[i].link.material.materials[1].opacity = controls.edgeOpacity;
-        }
+    }else{
+        network.linkMaterials.materials[1].color.set(controls.edgeColor);
+        network.linkMaterials.materials[1].opacity = controls.edgeOpacity;
     }
 }
 
-
 function recolorNodes(){
-    for (var i in nodes) {
-        nodes[i].material.color.set(controls.nodeColor);
+    for (var i in network.nodes) {
+        network.nodes[i].material.color.set(controls.nodeColor);
     }
 }
 
@@ -82,7 +75,7 @@ function nodeGroupColor(){
     var cols = network.info.info.nodes.colors;
     for (var i in nodes) {
         var n = nodes[i];
-        n.node.material.color.set(cols[gr[i]]); //(cols[gr[i]]);
+        n.mesh.material.color.set(cols[gr[i]]); //(cols[gr[i]]);
     }
 }
 
@@ -96,20 +89,5 @@ misc.clickNode = function(){
     container.addEventListener('mousedown', onDocumentMouseDown, false);
     container.addEventListener('touchstart', onDocumentTouchStart, false);
 
-
-    //
-
     window.addEventListener('resize', onWindowResize, false);
-
-}
-
-misc.hide = function(){
-  if (clicked.type == 'node'){
-    console.log('Removing node %s from scene', clicked.id);
-    scene.remove(nodes[clicked.id].node);
-  }
-  if (clicked.type == 'link'){//edges[edge_list[0].slice(0,2)].type
-    console.log('Removing edge '+clicked.id+' from scene');
-    scene.remove(edges[clicked.id].link.mesh)
-  }
-}
+};

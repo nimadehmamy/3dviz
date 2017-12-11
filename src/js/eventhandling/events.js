@@ -11,7 +11,7 @@ events = {
         document.mouse.x = e.clientX;
         document.mouse.y = e.clientY;
     },
-    
+
     getTouch: function(e) {
         document.touch.x = e.touches[0].clientX;
         document.touch.y = e.touches[0].clientY;
@@ -56,7 +56,7 @@ events = {
             elem.style.left = elem.newLoc.x;
             elem.style.top = elem.newLoc.y;
         };
-        
+
 
     },
 
@@ -71,7 +71,7 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
 }
-			
+
 function onDocumentTouchStart( event ) {
 
     event.preventDefault();
@@ -91,16 +91,23 @@ function onDocumentMouseDown( event ) {
 
     raycaster.setFromCamera(mouse, camera);
 
-    var intersects = raycaster.intersectObjects(
-        scene.children.slice(4, scene.children.length)); // to skip non-network objects
+    intersects = raycaster.intersectObjects(scene.children);//(nodeGroup.children.concat(edgeGroup.children));
+        // scene.children.slice(4, scene.children.length)); // to skip non-network objects
 
     if (intersects.length > 0) {
 
         //intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
+        console.log(intersects[0]);
         console.log(intersects[0].object.geometry.type);
-        var obid = intersects[0].object.id;
+        //var obid = intersects[0].object.name;//.id;
+        var obid = network.getClickedObject(intersects[0]);
+        try {
+                eventlogger.innerHTML = obid;
+            }
+        catch (err) { 1; }
         // if (intersects[ 0 ].object.geometry.type == "TetrahedronGeometry"){
         // vars.nodeGeometry.includes(inter...)
+        /*
         if (intersects[0].object.geometry.type == vars.nodeGeometry) {
             // intersects[0].object.material.color.setHex(Math.random() * 0xffffff);
             for (i in nodes) {
@@ -132,7 +139,7 @@ function onDocumentMouseDown( event ) {
                 catch (err) { continue }
             }
         }
-        
+        */
     }
 
     /*

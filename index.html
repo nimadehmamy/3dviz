@@ -42,7 +42,7 @@
                   var self = this;
                   self.makeViz = function(){
                       console.log('ko worked');
-                      Viz();
+                    //   Viz();
                   };
                   this.fileUpload = function(data, e){
                       var file = e.target.files[0];
@@ -78,14 +78,14 @@
                 }
               }
               
-              var VizFill = function(id){
-                VizClear(id);
-                var d = document.getElementById('ctrl');
-                f = d.files[0]
-                var z = document.getElementById(id);
-                z.value = f.webkitRelativePath.split('/')[0];
-                Viz();
-              }
+            //   var VizFill = function(id){
+            //     VizClear(id);
+            //     var d = document.getElementById('ctrl');
+            //     f = d.files[0]
+            //     var z = document.getElementById(id);
+            //     z.value = f.webkitRelativePath.split('/')[0];
+            //     Viz();
+            //   }
             </script>
             
           </div>
@@ -140,7 +140,7 @@
     	<!--<script src="src/js/visualization/vis-conf-1.js" defer>/* the main script */</script>
     	-->
     	<script src="src/js/controls/control-funcs.js">/* menu functions */</script>
-    	<script src="src/js/menus/controls.js" defer>/* gui menus and variables */</script>
+    	<script src="src/js/controls/controls.js" defer>/* gui menus and variables */</script>
 
     	<script src="src/js/visualization/vis.js" defer>/* the main script */</script>
     	<!--<script src="src/js/misc/typeahead-conf.js">/*listing dirs*/</script>
