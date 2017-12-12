@@ -97,8 +97,8 @@ function onDocumentMouseDown( event ) {
     if (intersects.length > 0) {
 
         //intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
-        console.log(intersects[0]);
-        console.log(intersects[0].object.geometry.type);
+        // console.log(intersects[0]);
+        // console.log(intersects[0].object.geometry.type);
         //var obid = intersects[0].object.name;//.id;
         var obid = network.getClickedObject(intersects[0]);
         try {

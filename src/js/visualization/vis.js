@@ -9,7 +9,6 @@ misc.clickNode();
 var network, netName, vars, edge_list, nodes_loc, nodes = {}, degrees, conflicts, mergedMesh, meregedNodeMesh;
 var Err;
 var Viz = function(data,name){
-    console.log(data);
     netName = name;
     var nam = document.getElementById('netName');
     nam.innerText = netName;

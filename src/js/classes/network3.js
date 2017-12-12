@@ -16,15 +16,15 @@ function Network(name, data){
 
     this.info = data;
 
-    this.Node = function(id, s, color){
+    this.Node = function(id, s, p){
         /* make node with id at v (vector) and with size s
         */
         this.type = 'node';
-        this.color = color || controls.nodeColor; //nodecolor
         this.id = id;
         this.size = s;
         this.geometry = new THREE.TetrahedronGeometry( this.size, controls.nodeDetail );
         this.degree = 0;
+        this.position = new THREE.Vector3(p[0],p[1],p[2]);
     };
 
     this.Link = function(id, data){
@@ -100,8 +100,8 @@ function Network(name, data){
             var p = nodeloc[i];
             id = i;
             if (net.info.nodes.labels) { id = net.info.nodes.labels[i]; }
-            net.nodes[id] = new net.Node(id, ns);
-            matrix.makeTranslation(c * p[0], -c * p[1], c * p[2]);
+            net.nodes[id] = new net.Node(id, ns, p);
+            matrix.makeTranslation(c * p[0], c * p[1], c * p[2]);
             net.nodesMergedGeometry.merge(net.nodes[id].geometry, matrix);
             net.nodes[id].geometry.dispose();
             net.nodes[id].geometry = null;
@@ -191,7 +191,7 @@ function Network(name, data){
         var pts = [];
         for (var j in p0) {
             // pts.push(new THREE.Vector3(c * p0[j].x, -c * p0[j].y, c * p0[j].z));
-            pts.push(new THREE.Vector3(c * p0[j][0], -c * p0[j][1], c * p0[j][2]));
+            pts.push(new THREE.Vector3(c * p0[j][0], c * p0[j][1], c * p0[j][2]));
         }
         return pts;
     };

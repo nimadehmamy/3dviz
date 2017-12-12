@@ -128,9 +128,9 @@ function render() {
 
 function centerCamera(){
     var ii = 0, com = {x:0,y:0,z:0};
-    for (i in network.nodes){
+    for (var i in network.nodes){
         ii++;
-        p = network.nodes[i].mesh.position;
+        p = network.nodes[i].position;
         com.x += p.x;
         com.y += p.y;
         com.z += p.z;
