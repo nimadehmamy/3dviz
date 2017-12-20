@@ -88,11 +88,11 @@ function onDocumentMouseDown( event ) {
 
     mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
     mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-
     raycaster.setFromCamera(mouse, camera);
 
     intersects = raycaster.intersectObjects(scene.children);//(nodeGroup.children.concat(edgeGroup.children));
         // scene.children.slice(4, scene.children.length)); // to skip non-network objects
+
 
     if (intersects.length > 0) {
 
@@ -105,42 +105,9 @@ function onDocumentMouseDown( event ) {
                 eventlogger.innerHTML = obid;
             }
         catch (err) { 1; }
-        // if (intersects[ 0 ].object.geometry.type == "TetrahedronGeometry"){
-        // vars.nodeGeometry.includes(inter...)
-        /*
-        if (intersects[0].object.geometry.type == vars.nodeGeometry) {
-            // intersects[0].object.material.color.setHex(Math.random() * 0xffffff);
-            for (i in nodes) {
-                if (nodes[i].node.id == obid) {
-                    console.log("Node ", nodes[i].id);
-                    clicked.type = nodes[i].type;
-                    clicked.id = nodes[i].id;
-
-                    eventlogger.innerHTML = "Node " + nodes[i].id;
-                    break;
-                }
-            }
-        }
-        //else
-        // if (intersects[ 0 ].object.geometry.type == "CylinderGeometry"){
-        if (intersects[0].object.geometry.type == vars.edgeGeometry) {
-            for (i in edges) {
-                //console.log(i);
-                try {
-                    if (edges[i].link.mesh.id == obid) {
-                        console.log("Edge ", edges[i].id);
-                        clicked.type = edges[i].type;
-                        clicked.id = edges[i].id;
-
-                        eventlogger.innerHTML = "Link " + edges[i].id;
-                        break;
-                    }
-                }
-                catch (err) { continue }
-            }
-        }
-        */
+        
     }
+
 
     /*
     // Parse all the faces
