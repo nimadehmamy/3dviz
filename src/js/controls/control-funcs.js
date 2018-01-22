@@ -9,6 +9,7 @@ function removeMesh(v) {
             }
         }
         scene.remove(v);
+        octree.remove(v);
         v.geometry.dispose();
         v.geometry = null;
         v.material = null;
@@ -20,7 +21,7 @@ function removeMesh(v) {
     }
 }
 
-var faceCount,edgeIndex={};
+var edgeFaceCount,edgeIndex={},nodeFaceCount,nodeFaceIndex={};
 
 function redrawEdges(){
     network.makeLinkMesh();
@@ -49,14 +50,15 @@ function recolorEdges(){
             network.linkMaterials.materials[ii++].opacity = controls.edgeOpacity;
         }
     }else{
-        network.linkMaterials.materials[1].color.set(controls.edgeColor);
-        network.linkMaterials.materials[1].opacity = controls.edgeOpacity;
+        network.linkMaterials.materials[0].color.set(controls.edgeColor);
+        network.linkMaterials.materials[0].opacity = controls.edgeOpacity;
     }
 }
 
 function recolorNodes(){
     for (var i in network.nodes) {
-        network.nodes[i].material.color.set(controls.nodeColor);
+        //network.nodes[i].material.color.set(controls.nodeColor);
+        network.nodeMaterial.color.set(controls.nodeColor);
     }
 }
 
@@ -84,6 +86,5 @@ misc.clickNode = function(){
 
     container.addEventListener('mousedown', onDocumentMouseDown, false);
     container.addEventListener('touchstart', onDocumentTouchStart, false);
-
     window.addEventListener('resize', onWindowResize, false);
 };

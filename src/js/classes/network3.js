@@ -88,12 +88,16 @@ function Network(name, data){
         net.makeLinkMesh();
     };
 
+    this.nodeFaceCount = 0;
+    this.nodeIndex = {};
+
     this.makeNodes = function(nodeloc, sizes){
-        removeMesh(net.mergedNodeMesh);
+        removeMesh(net.nodesMergedMesh);
         this.nodesMergedGeometry = new THREE.Geometry();
         var matrix = new THREE.Matrix4();
         var c = controls.scale;
         net.nodes = {}; // reset
+        var ii = 0;
         for (var i in nodeloc) {
             var sz = sizes ? sizes[i] : 1;
             var ns = controls.nodeSize * net.sizeFunc(controls.scale * sz);
@@ -103,12 +107,26 @@ function Network(name, data){
             net.nodes[id] = new net.Node(id, ns, p);
             matrix.makeTranslation(c * p[0], c * p[1], c * p[2]);
             net.nodesMergedGeometry.merge(net.nodes[id].geometry, matrix);
+            net.nodeIndex[ii] = id;
+            net.nodeFaceCount = net.nodes[id].geometry.faces.length;
             net.nodes[id].geometry.dispose();
             net.nodes[id].geometry = null;
+
+            if (controls.edgeColorRandom){
+              for(var j=0; j<net.nodeFaceCount; j++){
+                net.nodesMergedGeometry.faces[ii*net.nodeFaceCount+j].materialIndex = ii;
+              }
+            }else{
+              for(var j=0; j<net.nodeFaceCount; j++){
+                net.nodesMergedGeometry.faces[ii*net.nodeFaceCount+j].materialIndex = 0;
+              }
+            }
+            ii++;
         }
         net.makeNodeMaterials();
-        this.mergedNodeMesh = new THREE.Mesh(net.nodesMergedGeometry, net.nodeMaterial);
-        scene.add(net.mergedNodeMesh);
+        this.nodesMergedMesh = new THREE.Mesh(net.nodesMergedGeometry, net.nodeMaterial);
+        octree.add(net.nodesMergedMesh);
+        scene.add(net.nodesMergedMesh);
     };
 
 
@@ -143,7 +161,7 @@ function Network(name, data){
         }
     };
 
-    this.faceCount = 0;
+    this.edgeFaceCount = 0;
     this.edgeIndex = {};
 
     this.makeLinkMesh = function(){
@@ -155,23 +173,28 @@ function Network(name, data){
             net.links[i].link = new net.LinkGeometry(net.links[i].data)
             net.linksMergedGeometry.merge(net.links[i].link.geometry);
             net.edgeIndex[ii] = i;
-            net.faceCount = net.links[i].link.geometry.faces.length;
+            net.edgeFaceCount = net.links[i].link.geometry.faces.length;
             net.links[i].link.geometry.dispose();
             net.links[i].link.geometry = null;
             if (controls.edgeColorRandom){
-                for(var j=0; j<net.faceCount; j++){
-                    net.linksMergedGeometry.faces[ii*net.faceCount+j].materialIndex = ii;
+                for(var j=0; j<net.edgeFaceCount; j++){
+                    net.linksMergedGeometry.faces[ii*net.edgeFaceCount+j].materialIndex = ii;
                 }
             }
             else{
-              for(var j=0; j<net.faceCount; j++){
-                net.linksMergedGeometry.faces[ii*net.faceCount+j].materialIndex = 0;
+              for(var j=0; j<net.edgeFaceCount; j++){
+                net.linksMergedGeometry.faces[ii*net.edgeFaceCount+j].materialIndex = 0;
               }
             }
             ii++;
         }
         net.linksMergedMesh = new THREE.Mesh(net.linksMergedGeometry, net.linkMaterials);
         net.linksMergedMesh.name = "linkMesh";
+        if(ii < 5000){
+          octree.add(net.linksMergedMesh, {useFaces:true});
+        }else{
+          octree.add(net.linksMergedMesh);
+        }
         scene.add(net.linksMergedMesh);
 
     }
@@ -179,9 +202,11 @@ function Network(name, data){
     this.getClickedObject = function(inters){
         var obid;
         if(inters.object.name == "linkMesh"){
-            obid = net.edgeIndex[parseInt(inters.faceIndex/net.faceCount)];
+            obid = net.edgeIndex[parseInt(inters.faceIndex/net.edgeFaceCount)];
         }else{// if(inters.object.name == "nodeMesh"){
-            obid = inters.object.name; //network.getClickedNode(inters);
+            obid = net.nodeIndex[parseInt(inters.faceIndex/net.nodeFaceCount)];
+            //inters.object.name;
+            //network.getClickedNode(inters);
         }
         return obid;
     }

@@ -91,7 +91,7 @@ function render() {
 	    tube = edges[clicked.id].link;
 	    var pos = tube.extrudeSettings.extrudePath.getPointAt( t );//tube.parameters.path.getPointAt( t );
       //console.log(pos);
-	 
+
 		//pos.multiplyScalar( scale );
     	// interpolation
     	var segments = tube.extrudeSettings.steps; //tube.tangents.length;
@@ -123,6 +123,7 @@ function render() {
 	  }
 	}
 	renderer.render( scene, controls.follow === true ? splineCamera : camera );
+	octree.update();
 }
 
 

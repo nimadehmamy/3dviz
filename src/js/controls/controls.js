@@ -5,7 +5,7 @@ var controls = new function(){
     this.nodeColor = '#ede7e4';
     this.sameMaterialAsLinks = false;
 
-    this.lines = false;
+    //this.lines = false;
     this.edgeDiameter = 1.;
     this.edgeSegments = 10;
     this.edgeOpacity = 1;
@@ -43,7 +43,7 @@ guiNode.add(controls, 'nodeGroupColor').onChange(function(){
 
 
 //----------
-guiEdge.add(controls, 'lines' ).onFinishChange(redrawEdges);
+//guiEdge.add(controls, 'lines' ).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeDiameter', 0.001, 4).step(0.01).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeSegments', 1, 200).step(1).onFinishChange(redrawEdges);
 guiEdge.add(controls, 'edgeCross', 3, 100).step(1).onFinishChange(redrawEdges);

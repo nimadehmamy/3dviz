@@ -6,6 +6,7 @@ document.touch = {
     x: 0,
     y: 0
 };
+
 events = {
     getMouse: function(e) {
         document.mouse.x = e.clientX;
@@ -88,14 +89,25 @@ function onDocumentMouseDown( event ) {
 
     mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
     mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, camera, 1,20);
 
-    intersects = raycaster.intersectObjects(scene.children);//(nodeGroup.children.concat(edgeGroup.children));
+    //intersects = raycaster.intersectObjects(scene.children);//(nodeGroup.children.concat(edgeGroup.children));//for old version with grouped nodes and edges
         // scene.children.slice(4, scene.children.length)); // to skip non-network objects
 
+    // for(var i = 4; i < scene.children.length; i++){
+    //   if(scene.children[i].geometry){
+    //     if(raycaster.intersectObject(scene.children[i]).length > 0){
+    //       intersects = raycaster.intersectObject(scene.children[i]);
+    //     }
+    //   }
+    // }
+
+    var octreeObjects;
+    octreeObjects = octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction );
+    console.log(octreeObjects);
+	  intersects = raycaster.intersectOctreeObjects( octreeObjects );
 
     if (intersects.length > 0) {
-
         //intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
         // console.log(intersects[0]);
         // console.log(intersects[0].object.geometry.type);
@@ -105,7 +117,7 @@ function onDocumentMouseDown( event ) {
                 eventlogger.innerHTML = obid;
             }
         catch (err) { 1; }
-        
+
     }
 
 
@@ -118,6 +130,7 @@ function onDocumentMouseDown( event ) {
     }
     */
 }
+
 
 
 document.addEventListener('mousedown', events.getMouse,false);
