@@ -191,7 +191,7 @@ function Network(name, data){
         net.linksMergedMesh = new THREE.Mesh(net.linksMergedGeometry, net.linkMaterials);
         net.linksMergedMesh.name = "linkMesh";
         if(ii < 5000){
-          octree.add(net.linksMergedMesh, {useFaces:true});
+          octree.add(net.linksMergedMesh, {useVertices:true});
         }else{
           octree.add(net.linksMergedMesh);
         }
@@ -202,6 +202,7 @@ function Network(name, data){
     this.getClickedObject = function(inters){
         var obid;
         if(inters.object.name == "linkMesh"){
+            console.log(inters,","+inters.faceIndex);
             obid = net.edgeIndex[parseInt(inters.faceIndex/net.edgeFaceCount)];
         }else{// if(inters.object.name == "nodeMesh"){
             obid = net.nodeIndex[parseInt(inters.faceIndex/net.nodeFaceCount)];

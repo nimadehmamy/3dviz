@@ -104,7 +104,6 @@ function onDocumentMouseDown( event ) {
 
     var octreeObjects;
     octreeObjects = octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction );
-    console.log(octreeObjects);
 	  intersects = raycaster.intersectOctreeObjects( octreeObjects );
 
     if (intersects.length > 0) {
