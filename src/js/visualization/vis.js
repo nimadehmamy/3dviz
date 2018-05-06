@@ -31,7 +31,7 @@ var octree = new THREE.Octree({
 	depthMax: Infinity, // optional, default = Infinity, infinite depth
 	objectsThreshold: 8, // optional, default = 8
 	overlapPct: 0.15, // optional, default = 0.15 (15%), this helps sort objects that overlap nodes
-	scene: scene // optional, pass scene as parameter only if you wish to visualize octree
+	//scene: scene // optional, pass scene as parameter only if you wish to visualize octree
 } );
 
 function animate() {
