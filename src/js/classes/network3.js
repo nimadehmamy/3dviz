@@ -160,7 +160,7 @@ function Network(name, data){
             // }
             
             for(var j=0; j<net.nodeFaceCount; j++){
-                net.nodesMergedGeometry.faces[ii * net.nodeFaceCount + j].materialIndex = gc.materialIndex[ii];
+                net.nodesMergedGeometry.faces[ii * net.nodeFaceCount + j].materialIndex = gc.materialIndex[ii] || 0;
             }
             ii++;
         }
@@ -224,8 +224,9 @@ function Network(name, data){
         var gc = net.linkGroupColorIndex;
         var ii = 0;
         //for (var i in net.links) {
-        for (var l in net.info.info.links.labels) {
-            var i = net.info.info.links.labels[l];
+        var nl = net.info.info.links.labels || net.info.links
+        for (var l in nl) {
+            var i = net.info.info.links.labels ? net.info.info.links.labels[l] : l;
             net.links[i].link = new net.LinkGeometry(net.links[i].data)
             net.linksMergedGeometry.merge(net.links[i].link.geometry);
             net.edgeIndex[ii] = i;
@@ -243,7 +244,7 @@ function Network(name, data){
             //   }
             // }
             for(var j=0; j<net.edgeFaceCount; j++){
-                net.linksMergedGeometry.faces[ii * net.edgeFaceCount + j].materialIndex = gc.materialIndex[ii];
+                net.linksMergedGeometry.faces[ii * net.edgeFaceCount + j].materialIndex = gc.materialIndex[ii] || 0;
             }
             ii++;
         }
