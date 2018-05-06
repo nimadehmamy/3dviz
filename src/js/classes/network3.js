@@ -25,6 +25,8 @@ function Network(name, data){
         this.geometry = new THREE.TetrahedronGeometry( this.size, controls.nodeDetail );
         this.degree = 0;
         this.position = new THREE.Vector3(p[0],p[1],p[2]);
+        
+        
     };
 
     this.Link = function(id, data){
@@ -90,13 +92,48 @@ function Network(name, data){
 
     this.nodeFaceCount = 0;
     this.nodeIndex = {};
-
-    this.makeNodes = function(nodeloc, sizes){
+    
+    this.makeNodeColorGroups = function(){
+        var labs = net.info.info.nodes.labels;
+        var gr = net.info.info.nodes.groups;
+        var cl = net.info.info.nodes.colors;
+        var gc = []; // group color list [col1, col2,...]
+        var gi = {}; // indexing groups {g1:0, g2:1...}
+        var ii = 0;
+        if (cl){
+            for (var i in cl) {
+                gi[i] = ii; // map the group labels to numbers for indexing of materials
+                gc[ii] = cl[i]; // color
+                ii++;
+            }
+        }else{
+            gi = { 0: 0 };
+            gc = [controls.nodeColor];
+        }
+         
+        var grls = {};
+        for (var i in labs) {
+            var l = labs[i];
+            var g = gr ? gr[l] : 0;
+            var c = cl ? cl[g] : controls.nodeColor;
+            grls[i] = gi[g]; // which material index to use
+            // {
+            //     group: gc[g], // to index group material
+            //     color: c
+            // };
+        }
+        
+        net.nodeGroupColorIndex = { nodeMaterialIndex: grls, groupColors: gc }; // a dict mapping node idx to group and color
+    };
+    
+    this.makeNodes = function(nodeloc, sizes,col){
         removeMesh(net.nodesMergedMesh);
-        this.nodesMergedGeometry = new THREE.Geometry();
+        net.nodesMergedGeometry = new THREE.Geometry();
         var matrix = new THREE.Matrix4();
         var c = controls.scale;
         net.nodes = {}; // reset
+        net.makeNodeColorGroups();
+        var gc = net.nodeGroupColorIndex;
         var ii = 0;
         for (var i in nodeloc) {
             var sz = sizes ? sizes[i] : 1;
@@ -112,32 +149,43 @@ function Network(name, data){
             net.nodes[id].geometry.dispose();
             net.nodes[id].geometry = null;
 
-            if (controls.edgeColorRandom){
-              for(var j=0; j<net.nodeFaceCount; j++){
-                net.nodesMergedGeometry.faces[ii*net.nodeFaceCount+j].materialIndex = ii;
-              }
-            }else{
-              for(var j=0; j<net.nodeFaceCount; j++){
-                net.nodesMergedGeometry.faces[ii*net.nodeFaceCount+j].materialIndex = 0;
-              }
+            // if (controls.edgeColorRandom){
+            //   for(var j=0; j<net.nodeFaceCount; j++){
+            //     net.nodesMergedGeometry.faces[ii*net.nodeFaceCount+j].materialIndex = ii;
+            //   }
+            // }else{
+            //   for(var j=0; j<net.nodeFaceCount; j++){
+            //     net.nodesMergedGeometry.faces[ii*net.nodeFaceCount+j].materialIndex = 0;
+            //   }
+            // }
+            
+            for(var j=0; j<net.nodeFaceCount; j++){
+                net.nodesMergedGeometry.faces[ii * net.nodeFaceCount + j].materialIndex = gc.nodeMaterialIndex[ii];
             }
             ii++;
         }
-        net.makeNodeMaterials();
-        this.nodesMergedMesh = new THREE.Mesh(net.nodesMergedGeometry, net.nodeMaterial);
+        net.makeNodeMaterials(gc.groupColors);
+        net.nodesMergedMesh = new THREE.Mesh(net.nodesMergedGeometry, net.nodeMaterials);
         octree.add(net.nodesMergedMesh);
         scene.add(net.nodesMergedMesh);
     };
 
 
-    this.makeNodeMaterials = function(){
-      this.nodeMaterial = new THREE.MeshPhongMaterial( {
-        color: controls.nodeColor,
-        emissive: 0x072534,
-        shininess: 512,
-        shading: THREE.SmoothShading // THREE.FlatShading
-      } );
+    this.makeNodeMaterials = function(colors){
+        cols = colors || [controls.nodeColor];
+        net.nodeMaterials = new THREE.MultiMaterial([]);
+        for (var c in cols){
+            net.nodeMaterials.materials.push(
+                new THREE.MeshPhongMaterial({
+                    color: cols[c], //controls.nodeColor,
+                    emissive: 0x072534,
+                    shininess: 512,
+                    shading: THREE.SmoothShading // THREE.FlatShading
+                })
+            );
+        };
     };
+    
 
     this.makeLinkMaterials = function(){
         net.linkMaterials = new THREE.MultiMaterial([]);
