@@ -86,17 +86,17 @@ function Network(name, data){
         for (var i in nid){
             net.links[i] = new net.Link(i,nid[i]);
         }
-        net.makeLinkMaterials();
+        // net.makeLinkMaterials();
         net.makeLinkMesh();
     };
 
     this.nodeFaceCount = 0;
     this.nodeIndex = {};
     
-    this.makeNodeColorGroups = function(){
-        var labs = net.info.info.nodes.labels;
-        var gr = net.info.info.nodes.groups;
-        var cl = net.info.info.nodes.colors;
+    this.makeColorGroups = function(obj, col){
+        var labs = obj.labels;
+        var gr = obj.groups;
+        var cl = obj.colors;
         var gc = []; // group color list [col1, col2,...]
         var gi = {}; // indexing groups {g1:0, g2:1...}
         var ii = 0;
@@ -108,14 +108,14 @@ function Network(name, data){
             }
         }else{
             gi = { 0: 0 };
-            gc = [controls.nodeColor];
+            gc = [col];
         }
          
         var grls = {};
         for (var i in labs) {
             var l = labs[i];
             var g = gr ? gr[l] : 0;
-            var c = cl ? cl[g] : controls.nodeColor;
+            var c = cl ? cl[g] : col;
             grls[i] = gi[g]; // which material index to use
             // {
             //     group: gc[g], // to index group material
@@ -123,7 +123,7 @@ function Network(name, data){
             // };
         }
         
-        net.nodeGroupColorIndex = { nodeMaterialIndex: grls, groupColors: gc }; // a dict mapping node idx to group and color
+        return { materialIndex: grls, groupColors: gc }; // a dict mapping node idx to group and color
     };
     
     this.makeNodes = function(nodeloc, sizes,col){
@@ -132,7 +132,7 @@ function Network(name, data){
         var matrix = new THREE.Matrix4();
         var c = controls.scale;
         net.nodes = {}; // reset
-        net.makeNodeColorGroups();
+        net.nodeGroupColorIndex = net.makeColorGroups(net.info.info.nodes, controls.nodeColor);
         var gc = net.nodeGroupColorIndex;
         var ii = 0;
         for (var i in nodeloc) {
@@ -160,7 +160,7 @@ function Network(name, data){
             // }
             
             for(var j=0; j<net.nodeFaceCount; j++){
-                net.nodesMergedGeometry.faces[ii * net.nodeFaceCount + j].materialIndex = gc.nodeMaterialIndex[ii];
+                net.nodesMergedGeometry.faces[ii * net.nodeFaceCount + j].materialIndex = gc.materialIndex[ii];
             }
             ii++;
         }
@@ -187,7 +187,8 @@ function Network(name, data){
     };
     
 
-    this.makeLinkMaterials = function(){
+    this.makeLinkMaterials = function(colors){
+        cols = colors || [controls.edgeColor];
         net.linkMaterials = new THREE.MultiMaterial([]);
         if (controls.edgeColorRandom){
             for (var i in net.links) {
@@ -198,14 +199,17 @@ function Network(name, data){
                     shading: THREE.SmoothShading }));
             }
         }else{
-            net.linkMaterials.materials.push(
-              //new THREE.MeshBasicMaterial({color: 0xffffff }),
-                new THREE.MeshPhongMaterial({
-                color: controls.edgeColor,
-                transparent:true,
-                shininess: 256,
-                shading: THREE.SmoothShading })
-            );
+            for (var c in cols){
+                net.linkMaterials.materials.push(
+                    //new THREE.MeshBasicMaterial({color: 0xffffff }),
+                    new THREE.MeshPhongMaterial({
+                        color: cols[c],
+                        transparent: true,
+                        shininess: 256,
+                        shading: THREE.SmoothShading
+                    })
+                );
+            }
         }
     };
 
@@ -216,26 +220,35 @@ function Network(name, data){
         net.linkGroup.children = [];
         removeMesh(net.linksMergedMesh);
         net.linksMergedGeometry = new THREE.Geometry();
+        net.linkGroupColorIndex = net.makeColorGroups(net.info.info.links, controls.edgeColor);
+        var gc = net.linkGroupColorIndex;
         var ii = 0;
-        for (var i in net.links) {
+        //for (var i in net.links) {
+        for (var l in net.info.info.links.labels) {
+            var i = net.info.info.links.labels[l];
             net.links[i].link = new net.LinkGeometry(net.links[i].data)
             net.linksMergedGeometry.merge(net.links[i].link.geometry);
             net.edgeIndex[ii] = i;
             net.edgeFaceCount = net.links[i].link.geometry.faces.length;
             net.links[i].link.geometry.dispose();
             net.links[i].link.geometry = null;
-            if (controls.edgeColorRandom){
-                for(var j=0; j<net.edgeFaceCount; j++){
-                    net.linksMergedGeometry.faces[ii*net.edgeFaceCount+j].materialIndex = ii;
-                }
-            }
-            else{
-              for(var j=0; j<net.edgeFaceCount; j++){
-                net.linksMergedGeometry.faces[ii*net.edgeFaceCount+j].materialIndex = 0;
-              }
+            // if (controls.edgeColorRandom){
+            //     for(var j=0; j<net.edgeFaceCount; j++){
+            //         net.linksMergedGeometry.faces[ii*net.edgeFaceCount+j].materialIndex = ii;
+            //     }
+            // }
+            // else{
+            //   for(var j=0; j<net.edgeFaceCount; j++){
+            //     net.linksMergedGeometry.faces[ii*net.edgeFaceCount+j].materialIndex = 0;
+            //   }
+            // }
+            for(var j=0; j<net.edgeFaceCount; j++){
+                net.linksMergedGeometry.faces[ii * net.edgeFaceCount + j].materialIndex = gc.materialIndex[ii];
             }
             ii++;
         }
+        
+        net.makeLinkMaterials(gc.groupColors);
         net.linksMergedMesh = new THREE.Mesh(net.linksMergedGeometry, net.linkMaterials);
         net.linksMergedMesh.name = "linkMesh";
         if(ii < 5000){
